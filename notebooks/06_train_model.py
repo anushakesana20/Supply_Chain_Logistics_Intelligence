@@ -1,5 +1,5 @@
 import pandas as pd
-
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
@@ -128,7 +128,32 @@ accuracy = accuracy_score(y_test, y_pred)
 print("\n========== MODEL RESULTS ==========")
 
 print("Accuracy:", accuracy)
+# ============================================================
+# SIMPLE BASELINE COMPARISON
+# ============================================================
 
+majority_class = y_test.mode()[0]
+
+baseline_predictions = np.full(
+    len(y_test),
+    majority_class
+)
+
+baseline_accuracy = (
+    baseline_predictions == y_test
+).mean()
+
+print("\n========== BASELINE COMPARISON ==========")
+
+print(
+    f"Majority Class Baseline Accuracy: "
+    f"{baseline_accuracy:.4f}"
+)
+
+print(
+    f"Random Forest Accuracy: "
+    f"{accuracy:.4f}"
+)
 print("\nClassification Report:")
 print(classification_report(y_test, y_pred))
 

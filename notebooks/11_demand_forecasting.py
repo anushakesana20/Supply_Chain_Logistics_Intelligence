@@ -7,7 +7,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 # ============================================================
 # DEMAND FORECASTING - SUPPLY CHAIN PROJECT
-# Seasonal Naive Forecasting
+# Naive Baseline + Seasonal Naive Forecasting
 # ============================================================
 
 print("\n========== DEMAND FORECASTING ==========\n")
@@ -167,8 +167,6 @@ print(
 )
 
 
-# Last 7 months used for testing
-
 test_size = 7
 
 
@@ -207,6 +205,44 @@ print(
 
 
 # ============================================================
+# NAIVE BASELINE MODEL
+# ============================================================
+
+print(
+    "\n========== NAIVE BASELINE ==========\n"
+)
+
+print(
+    "Using the previous month's sales as the baseline forecast..."
+)
+
+
+naive_forecast_values = []
+
+
+for i in range(len(test)):
+
+    if i == 0:
+
+        value = train.iloc[-1]
+
+    else:
+
+        value = test.iloc[i - 1]
+
+    naive_forecast_values.append(
+        value
+    )
+
+
+naive_forecast = pd.Series(
+    naive_forecast_values,
+    index=test.index,
+    name="Naive Forecast"
+)
+
+
+# ============================================================
 # SEASONAL NAIVE FORECAST
 # ============================================================
 
@@ -219,129 +255,202 @@ print(
 )
 
 
-# For each test month, use the value
-# from the same month in the previous year.
+seasonal_forecast_values = []
 
-test_forecast_values = []
 
 for date in test.index:
 
-    previous_year = date - pd.DateOffset(years=1)
+    previous_year = date - pd.DateOffset(
+        years=1
+    )
 
     if previous_year in train.index:
 
-        value = train.loc[previous_year]
+        value = train.loc[
+            previous_year
+        ]
 
     else:
 
         value = train.iloc[-1]
 
-    test_forecast_values.append(value)
+    seasonal_forecast_values.append(
+        value
+    )
 
 
-test_forecast = pd.Series(
-    test_forecast_values,
+seasonal_forecast = pd.Series(
+    seasonal_forecast_values,
     index=test.index,
-    name="Forecast"
+    name="Seasonal Forecast"
 )
 
 
 print(
-    "Forecast model trained successfully."
+    "Seasonal forecast model trained successfully."
 )
 
 
 # ============================================================
-# MODEL EVALUATION
+# EVALUATION FUNCTION
 # ============================================================
 
-mae = mean_absolute_error(
-    test,
-    test_forecast
-)
+def calculate_metrics(actual, forecast):
 
-
-rmse = np.sqrt(
-    mean_squared_error(
-        test,
-        test_forecast
+    mae = mean_absolute_error(
+        actual,
+        forecast
     )
-)
 
-
-# Safe MAPE calculation
-
-test_values = test.to_numpy()
-
-forecast_values = test_forecast.to_numpy()
-
-
-non_zero_mask = (
-    test_values != 0
-)
-
-
-if non_zero_mask.sum() > 0:
-
-    mape = (
-        np.mean(
-            np.abs(
-                (
-                    test_values[non_zero_mask]
-                    -
-                    forecast_values[non_zero_mask]
-                )
-                /
-                test_values[non_zero_mask]
-            )
+    rmse = np.sqrt(
+        mean_squared_error(
+            actual,
+            forecast
         )
-        * 100
     )
+
+    actual_values = actual.to_numpy()
+
+    forecast_values = forecast.to_numpy()
+
+    non_zero_mask = (
+        actual_values != 0
+    )
+
+    if non_zero_mask.sum() > 0:
+
+        mape = (
+            np.mean(
+                np.abs(
+                    (
+                        actual_values[non_zero_mask]
+                        -
+                        forecast_values[non_zero_mask]
+                    )
+                    /
+                    actual_values[non_zero_mask]
+                )
+            )
+            * 100
+        )
+
+    else:
+
+        mape = np.nan
+
+    return mae, rmse, mape
+
+
+# ============================================================
+# CALCULATE BASELINE METRICS
+# ============================================================
+
+naive_mae, naive_rmse, naive_mape = calculate_metrics(
+    test,
+    naive_forecast
+)
+
+
+# ============================================================
+# CALCULATE SEASONAL MODEL METRICS
+# ============================================================
+
+seasonal_mae, seasonal_rmse, seasonal_mape = calculate_metrics(
+    test,
+    seasonal_forecast
+)
+
+
+# ============================================================
+# DISPLAY MODEL COMPARISON
+# ============================================================
+
+print(
+    "\n========== MODEL COMPARISON ==========\n"
+)
+
+
+print(
+    "Naive Baseline:"
+)
+
+print(
+    f"MAE: {naive_mae:,.2f}"
+)
+
+print(
+    f"RMSE: {naive_rmse:,.2f}"
+)
+
+if not np.isnan(naive_mape):
+
+    print(
+        f"MAPE: {naive_mape:.2f}%"
+    )
+
+
+print(
+    "\nSeasonal Naive Model:"
+)
+
+print(
+    f"MAE: {seasonal_mae:,.2f}"
+)
+
+print(
+    f"RMSE: {seasonal_rmse:,.2f}"
+)
+
+if not np.isnan(seasonal_mape):
+
+    print(
+        f"MAPE: {seasonal_mape:.2f}%"
+    )
+
+
+# ============================================================
+# DETERMINE BETTER MODEL
+# ============================================================
+
+if seasonal_mae < naive_mae:
+
+    selected_model = "Seasonal Naive"
 
 else:
 
-    mape = np.nan
+    selected_model = "Naive Baseline"
+
+
+print(
+    "\nSelected forecasting approach:",
+    selected_model
+)
 
 
 # ============================================================
-# DISPLAY PERFORMANCE
-# ============================================================
-
-print(
-    "\n========== FORECAST MODEL PERFORMANCE ==========\n"
-)
-
-print(
-    f"Mean Absolute Error (MAE): {mae:,.2f}"
-)
-
-print(
-    f"Root Mean Squared Error (RMSE): {rmse:,.2f}"
-)
-
-if not np.isnan(mape):
-
-    print(
-        f"Mean Absolute Percentage Error (MAPE): {mape:.2f}%"
-    )
-
-
-# ============================================================
-# SAVE EVALUATION RESULTS
+# SAVE MODEL COMPARISON
 # ============================================================
 
 evaluation_results = pd.DataFrame({
 
-    "Metric": [
-        "MAE",
-        "RMSE",
-        "MAPE"
+    "Model": [
+        "Naive Baseline",
+        "Seasonal Naive"
     ],
 
-    "Value": [
-        mae,
-        rmse,
-        mape
+    "MAE": [
+        naive_mae,
+        seasonal_mae
+    ],
+
+    "RMSE": [
+        naive_rmse,
+        seasonal_rmse
+    ],
+
+    "MAPE": [
+        naive_mape,
+        seasonal_mape
     ]
 
 })
@@ -369,7 +478,7 @@ print(
 
 
 # ============================================================
-# FUTURE FORECAST - NEXT 6 MONTHS
+# FINAL FORECAST MODEL
 # ============================================================
 
 print(
@@ -377,7 +486,8 @@ print(
 )
 
 print(
-    "Generating next 6 months forecast..."
+    "Generating next 6 months forecast using:",
+    selected_model
 )
 
 
@@ -397,17 +507,46 @@ future_dates = pd.date_range(
 future_values = []
 
 
+# ============================================================
+# GENERATE FUTURE FORECAST USING SELECTED MODEL
+# ============================================================
+
 for date in future_dates:
 
-    previous_year = date - pd.DateOffset(years=1)
+    if selected_model == "Naive Baseline":
 
-    if previous_year in monthly_demand.index:
+        # For the first future month, use the last
+        # historical value.
+        #
+        # For the next months, use the previous
+        # forecasted value.
 
-        value = monthly_demand.loc[previous_year]
+        if len(future_values) == 0:
+
+            value = monthly_demand.iloc[-1]
+
+        else:
+
+            value = future_values[-1]
 
     else:
 
-        value = monthly_demand.iloc[-1]
+        # Seasonal Naive:
+        # Use the same month from the previous year.
+
+        previous_year = date - pd.DateOffset(
+            years=1
+        )
+
+        if previous_year in monthly_demand.index:
+
+            value = monthly_demand.loc[
+                previous_year
+            ]
+
+        else:
+
+            value = monthly_demand.iloc[-1]
 
     future_values.append(
         value
@@ -513,7 +652,7 @@ print(
 
 # ============================================================
 # GRAPH 1
-# ACTUAL VS FORECAST
+# ACTUAL VS BASELINE VS SEASONAL FORECAST
 # ============================================================
 
 plt.figure(
@@ -537,14 +676,22 @@ plt.plot(
 
 plt.plot(
     test.index,
-    test_forecast.values,
+    naive_forecast.values,
     marker="o",
-    label="Seasonal Forecast"
+    label="Naive Baseline"
+)
+
+
+plt.plot(
+    test.index,
+    seasonal_forecast.values,
+    marker="o",
+    label="Seasonal Naive Forecast"
 )
 
 
 plt.title(
-    "Demand Forecasting - Model Evaluation"
+    "Demand Forecasting - Model Comparison"
 )
 
 plt.xlabel(
@@ -647,6 +794,39 @@ print(
 
 print(
     future_graph_path
+)
+
+
+# ============================================================
+# BUSINESS INTERPRETATION
+# ============================================================
+
+print(
+    "\n========== BUSINESS INTERPRETATION ==========\n"
+)
+
+print(
+    "The forecast can be used to support inventory "
+    "and demand planning."
+)
+
+print(
+    "Higher forecasted sales indicate periods where "
+    "additional inventory and logistics capacity "
+    "may be required."
+)
+
+print(
+    "Lower forecasted sales indicate periods where "
+    "inventory replenishment can be controlled "
+    "to reduce excess stock."
+)
+
+print(
+    "Because the dataset does not contain actual "
+    "inventory stock levels, the forecast is used "
+    "as a demand-planning indicator rather than "
+    "an actual stock-out prediction."
 )
 
 
