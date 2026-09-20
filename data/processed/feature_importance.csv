@@ -1,0 +1,83 @@
+Feature,Importance
+Days for shipment (scheduled),0.38653554444818755
+Shipping Mode_Standard Class,0.28862563380464384
+Shipping Mode_Second Class,0.06314951181869656
+Sales,0.05162609225823564
+Shipping Mode_Same Day,0.04348234845152065
+Order Item Quantity,0.029791288904974268
+Product Price,0.02896964596112573
+Category Name_Electronics,0.0031274628934358597
+Category Name_Girls' Apparel,0.0030587934742677294
+Category Name_Cardio Equipment,0.0030454256656888743
+Category Name_Golf Gloves,0.003039180107916143
+Order Region_US Center ,0.002970561470956333
+Category Name_Shop By Sport,0.0029605727659564015
+Order Region_Eastern Asia,0.0027870634174222805
+Order Region_West of USA ,0.0027602571251688266
+Order Region_Southeast Asia,0.0027048501339415627
+Order Region_Oceania,0.0026184214691538977
+Order Region_East of USA,0.0025836909394970913
+Order Region_South Asia,0.002581046723218868
+Order Region_Western Europe,0.00253242079584556
+Order Region_West Asia,0.0024991913831028485
+Order Region_South of  USA ,0.0024040902869418655
+Order Region_Northern Europe,0.0023586834335729816
+Order Region_South America,0.002356960923882834
+Market_Pacific Asia,0.0023133758303818166
+Order Region_Central America,0.002297414628104176
+Market_USCA,0.002282542435309069
+Category Name_Cleats,0.0022699159340459885
+Category Name_Indoor/Outdoor Games,0.002260117844585771
+Order Region_Southern Europe,0.002236813310898192
+Market_Europe,0.002121906661115557
+Order Region_North Africa,0.0020904508639506174
+Category Name_Women's Apparel,0.0020624289766088336
+Market_LATAM,0.0019416102650306477
+Category Name_Baseball & Softball,0.0019168558410026823
+Order Region_West Africa,0.001888715617243446
+Order Region_Eastern Europe,0.0017971628595866195
+Category Name_Lacrosse,0.0017921914016844934
+Category Name_Trade-In,0.001710708123432468
+Order Region_Caribbean,0.0016639351130414424
+Category Name_Hockey,0.0016552881705228688
+Order Region_East Africa,0.0016211448306657221
+Order Region_Southern Africa,0.0016146494987639868
+Category Name_Golf Balls,0.0015724977354579124
+Category Name_Boxing & MMA,0.0015459489163290154
+Category Name_Hunting & Shooting,0.0015309562330827482
+Order Region_Central Africa,0.0013523206977061547
+Category Name_Golf Shoes,0.0013056516851767568
+Category Name_Tennis & Racquet,0.0012954964206192284
+Category Name_Golf Apparel,0.0012687337550509985
+Order Region_Central Asia,0.0012552671242590772
+Category Name_Fitness Accessories,0.0011454468841502856
+Category Name_Water Sports,0.0009688834518637954
+Category Name_Kids' Golf Clubs,0.0009103899732859497
+Category Name_Men's Footwear,0.0009082798489485854
+Category Name_Camping & Hiking,0.0007994792901393123
+Category Name_Fishing,0.0007027529657446407
+Category Name_Men's Golf Clubs,0.0006885046737397907
+Category Name_Women's Golf Clubs,0.0006460266338878906
+Category Name_Soccer,0.000545643380430058
+Category Name_Baby ,0.0004676781294232571
+Category Name_DVDs,0.0004033270410282156
+Category Name_Books ,0.0003955303868778385
+Category Name_Consumer Electronics,0.0003905099523078434
+Category Name_As Seen on  TV!,0.0003753375300373999
+Category Name_Children's Clothing,0.0003013077172563062
+Category Name_Strength Training,0.00025980913842511404
+Category Name_Health and Beauty,0.00025604820615399306
+Category Name_Pet Supplies,0.00025381235992229364
+Category Name_Crafts,0.00024413712222027466
+Category Name_CDs ,0.00022623823106860742
+Category Name_Women's Clothing,0.00020106489294474054
+Category Name_Cameras ,0.00019431219738776684
+Category Name_Music,0.00019339534744647547
+Category Name_Golf Bags & Carts,0.00018066443636790202
+Category Name_Computers,0.0001786159675078128
+Category Name_Men's Clothing,0.00017745080310661098
+Category Name_Basketball,0.0001675897110686085
+Category Name_Video Games,0.00015987491175389383
+Category Name_Toys,0.0001507517399981329
+Category Name_Sporting Goods,0.00014775009880905316
+Category Name_Garden,0.0001265475456870929

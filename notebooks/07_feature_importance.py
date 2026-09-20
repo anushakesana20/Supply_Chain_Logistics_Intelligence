@@ -91,7 +91,12 @@ importance = importance.sort_values(
     by="Importance",
     ascending=False
 )
+importance.to_csv(
+    "data/processed/feature_importance.csv",
+    index=False
+)
 
+print("Feature importance CSV saved successfully!")
 print("\n========== TOP 15 IMPORTANT FEATURES ==========")
 
 print(importance.head(15).to_string(index=False))
